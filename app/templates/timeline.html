@@ -1,28 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Timeline</title>
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block title %}Timeline{% endblock %}
 
-<h1>Timeline</h1>
+{% block content %}
+<section class="team-section">
+    <h1 class="hero-title" style="margin-bottom: 20px;">Timeline</h1>
 
-<form id="timeline-form">
-    <input id="name" placeholder="Name" required>
-    <input id="email" placeholder="Email" required>
-    <textarea id="content" placeholder="What's happening?" required></textarea>
-    <button type="submit">Post</button>
-</form>
+    <form id="timeline-form" style="max-width: 500px; margin: 0 auto 40px auto; display: flex; flex-direction: column; gap: 10px;">
+        <input id="name" placeholder="Name" required style="padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+        <input id="email" type="email" placeholder="Email" required style="padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+        <textarea id="content" placeholder="What's happening?" required style="padding: 10px; border-radius: 6px; border: 1px solid #ccc; min-height: 80px;"></textarea>
+        <button type="submit" class="btn">Post</button>
+    </form>
 
-
-<h2>Posts</h2>
-
-<div id="posts"></div>
-
+    <div id="posts" style="max-width: 500px; margin: 0 auto;"></div>
+</section>
 
 <script>
-
 async function loadPosts() {
     const response = await fetch('/api/timeline_post');
     const data = await response.json();
@@ -31,21 +25,22 @@ async function loadPosts() {
     postsDiv.innerHTML = "";
 
     data.timeline_posts.forEach(post => {
+        const avatarUrl = `https://www.gravatar.com/avatar/?d=identicon`;
         postsDiv.innerHTML += `
-            <div>
-                <h3>${post.name}</h3>
-                <p>${post.content}</p>
-                <small>${post.created_at}</small>
+            <div style="display:flex; gap:12px; padding:14px 0; border-bottom:1px solid #eee;">
+                <img src="${avatarUrl}" width="48" height="48" style="border-radius:50%;">
+                <div>
+                    <h3 style="margin:0;">${post.name}</h3>
+                    <p style="margin:4px 0;">${post.content}</p>
+                    <small style="color:#888;">${post.created_at}</small>
+                </div>
             </div>
-            <hr>
         `;
     });
 }
 
-
 document.getElementById("timeline-form")
 .addEventListener("submit", async function(event) {
-
     event.preventDefault();
 
     await fetch('/api/timeline_post', {
@@ -60,16 +55,10 @@ document.getElementById("timeline-form")
         })
     });
 
-
     document.getElementById("timeline-form").reset();
-
     loadPosts();
 });
 
-
 loadPosts();
-
 </script>
-
-</body>
-</html>
+{% endblock %}
