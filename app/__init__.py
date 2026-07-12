@@ -14,7 +14,6 @@ mydb = MySQLDatabase(os.getenv("MYSQL_DATABASE"),
     host=os.getenv("MYSQL_HOST"),
     port=3306
 )
-
 print(mydb)
 
 class TimelinePost(Model):
@@ -252,8 +251,7 @@ def post_time_line_post():
     content = request.form['content']
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
 
-    return model_to_dict(timeline_post)
-
+return model_to_dict(timeline_post)
 
 @app.route('/api/timeline_post', methods=['GET'])
 def get_time_line_post():
@@ -272,3 +270,8 @@ def delete_time_line_post(post_id):
         return {"error": "Post not found"}, 404
     post.delete_instance()
     return {"message": f"Post {post_id} deleted"}
+
+@app.route('/timeline')
+def timeline():
+    return render_template('timeline.html', title="Timeline")
+

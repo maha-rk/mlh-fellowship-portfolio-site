@@ -1,12 +1,19 @@
 #!/bin/bash
+set -e
 
-tmux kill-server 2>/dev/null
+PROJECT_DIR="$HOME/mlh-fellowship-portfolio-site"
+VENV_DIR="venv"
 
-cd ~/mlh-fellowship-portfolio-site
+cd "$PROJECT_DIR"
 
 git fetch && git reset origin/main --hard
 
-source python3-virtualenv/bin/activate
+source "$VENV_DIR/bin/activate"
+
 pip install -r requirements.txt
 
-tmux new-session -d -s flask_server "cd ~/mlh-fellowship-portfolio-site && source python3-virtualenv/bin/activate && export FLASK_ENV=development && flask run --host=0.0.0.0"
+deactivate
+
+sudo systemctl restart myportfolio
+
+echo "Redeploy complete. myportfolio service restarted."
