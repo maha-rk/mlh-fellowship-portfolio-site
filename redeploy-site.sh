@@ -2,18 +2,13 @@
 set -e
 
 PROJECT_DIR="$HOME/mlh-fellowship-portfolio-site"
-VENV_DIR="venv"
 
 cd "$PROJECT_DIR"
 
 git fetch && git reset origin/main --hard
 
-source "$VENV_DIR/bin/activate"
+docker compose -f docker-compose.prod.yml down
 
-pip install -r requirements.txt
+docker compose -f docker-compose.prod.yml up -d --build
 
-deactivate
-
-sudo systemctl restart myportfolio
-
-echo "Redeploy complete. myportfolio service restarted."
+echo "Redeploy complete. myportfolio containers restarted."
